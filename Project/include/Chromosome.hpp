@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <fstream>
-#include <memory>
+#include <string>
 
 using namespace std;
 
@@ -21,6 +21,8 @@ public:
     Chromosome();
 
     void AddListItemsFromText();
+
+    void ConvertChar();
 
     void Cross();
 

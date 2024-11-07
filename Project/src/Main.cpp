@@ -9,5 +9,9 @@ int main()
 
     chromosomeList.PrintAll();
 
+    // chromosomeList.DeleteAll();
+
+    // chromosomeList.Mutation();
+
     return 0;
 }

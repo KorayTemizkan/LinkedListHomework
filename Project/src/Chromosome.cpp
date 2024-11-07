@@ -57,3 +57,80 @@ void Chromosome::DeleteAll()
     }
 }
 
+void Chromosome::Mutation()
+{
+    int choice1 = 0 , choice2 = 0;
+    int length1 = 0 , length2 = 0;
+    string temp1="", temp2="" , sub1="" , sub2="" , sub3="" , sub4="" , res1 = "",res2="";
+    
+    cout << "Hangi satirlari caprazlamak istiyorsunuz ? (0-x)" << endl;
+    cout << "1 : " << choice1 << endl;
+    cout << "2 : " << choice2 << endl;    // Mesela 3 ve 4'e erişelim
+    // A C F Y U D K R (15 KARAKTER = %2 = 7.5)
+    // M U A D T R     (11 KARAKTER = %2 = 5.5)
+
+    Chromosome *pSel1 = pRoot;
+    for (int i = 0; i < choice1; i++)
+    {
+        pSel1 = pSel1->pNext;
+    }
+    
+    Chromosome *pSel2 = pRoot;
+    for (int i = 0; i < choice2; i++)
+    {
+        pSel2 = pSel2->pNext;
+    }
+
+
+
+    length1 = pSel1->genes.length();
+    length2 = pSel2->genes.length();
+
+
+
+    if (length1%2!=0) // Toplam gen sayısı çift sayıysa
+    {
+        sub1 = pSel2->genes.substr(0,(length1/2)-1);
+        sub2 = pSel2->genes.substr((length1/2)+1,length1);
+    }
+
+    /*
+    else // Tek sayıysa
+    {
+        sub1 = pSel1->genes.substr(0,(length1/2));
+    }
+    */
+
+    if (length2%2==0) // Çift sayıysa
+    {
+        sub3 = pSel2->genes.substr(0,(length2/2)-1);
+        sub4 = pSel2->genes.substr((length2/2)+1,length2);
+    }
+    
+    /*
+    else // Tek sayıysa
+    {
+        sub2 = pSel2->genes.substr((length2/2-1),length2);
+    }
+    */
+
+
+
+    res1 = sub1+sub4;
+    res2 = sub2+sub3;
+
+
+
+    Chromosome *pSel3 = pRoot;
+    Chromosome *pNew1 = new Chromosome();
+    Chromosome *pNew2 = new Chromosome();
+    while (pSel3!=nullptr)
+    {
+        pSel3=pSel3->pNext;
+    }
+ 
+    pNew1->genes=res1;
+    pNew2->genes=res2;
+    pSel3->pNext = pNew1;
+    pNew1->pNext = pNew2;
+}
