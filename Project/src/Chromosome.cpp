@@ -65,7 +65,11 @@ void Chromosome::Mutation()
     
     cout << "Hangi satirlari caprazlamak istiyorsunuz ? (0-x)" << endl;
     cout << "1 : " << choice1 << endl;
-    cout << "2 : " << choice2 << endl;    // Mesela 3 ve 4'e erişelim
+    cin >> choice1;
+    cout << "2 : " << choice2 << endl;
+    cin >> choice2;
+
+    // Mesela 3 ve 4'e erişelim
     // A C F Y U D K R (15 KARAKTER = %2 = 7.5)
     // M U A D T R     (11 KARAKTER = %2 = 5.5)
 
@@ -124,6 +128,7 @@ void Chromosome::Mutation()
     Chromosome *pSel3 = pRoot;
     Chromosome *pNew1 = new Chromosome();
     Chromosome *pNew2 = new Chromosome();
+
     while (pSel3!=nullptr)
     {
         pSel3=pSel3->pNext;
@@ -133,4 +138,28 @@ void Chromosome::Mutation()
     pNew2->genes=res2;
     pSel3->pNext = pNew1;
     pNew1->pNext = pNew2;
+}
+
+void Chromosome::Mutation()
+{
+    int choiceRow = 0 , choiceCol = 0;
+
+    cout << "Sirasiyla mutasyona uğratmak istediğiniz kromozomun satir ve sutun numarasini giriniz." << endl;
+    cout << "1 : " << choiceRow << endl;
+    cin >> choiceRow;
+    cout << "2 : " << choiceCol << endl;
+    cin >> choiceCol;
+
+    Chromosome *pSel1 = pRoot;
+    for (int i = 0; i < choiceRow; i++)
+    {
+        pSel1 = pSel1->pNext;
+    }
+
+    // Mesela 2. satıra 3.sütun olsun (indis : 1)(indis : 3) , (D E V U)
+
+    // 1 ÇIKARIP 2 İLE ÇARP
+    // 0 2 4 6
+    // D E V U
+    pSel1->genes[(choiceCol-1)*2]='X';
 }
