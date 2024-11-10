@@ -1,3 +1,6 @@
+
+
+
 #include "Chromosome.hpp"
 
 Chromosome::Chromosome()
@@ -57,18 +60,26 @@ void Chromosome::DeleteAll()
     }
 }
 
-void Chromosome::Mutation()
-{
+void Chromosome::Cross(int fnum1 , int fnum2)
+{   
     int choice1 = 0 , choice2 = 0;
     int length1 = 0 , length2 = 0;
     string temp1="", temp2="" , sub1="" , sub2="" , sub3="" , sub4="" , res1 = "",res2="";
     
+    if(fnum1 == 0 && fnum2 == 0)
+    {
     cout << "Hangi satirlari caprazlamak istiyorsunuz ? (0-x)" << endl;
     cout << "1 : " << choice1 << endl;
     cin >> choice1;
     cout << "2 : " << choice2 << endl;
     cin >> choice2;
+    }
 
+    else
+    {
+        choice1 = fnum1;
+        choice2 = fnum2;
+    }
     // Mesela 3 ve 4'e erişelim
     // A C F Y U D K R (15 KARAKTER = %2 = 7.5)
     // M U A D T R     (11 KARAKTER = %2 = 5.5)
@@ -140,7 +151,7 @@ void Chromosome::Mutation()
     pNew1->pNext = pNew2;
 }
 
-void Chromosome::Mutation()
+void Chromosome::Mutation(int fnum1 , int fnum2)
 {
     int choiceRow = 0 , choiceCol = 0;
 
@@ -165,7 +176,7 @@ void Chromosome::Mutation()
     pSel1->genes[(choiceCol-1)*2]='X';
 }
 
-void Chromosome::Automatic()
+void Chromosome::Automatic() // switch case mantıklı
 {
     ifstream ReadFile("Islemler.txt");
     string myText;
@@ -188,4 +199,31 @@ void Chromosome::Automatic()
             Mutation(num1,num2);
         }
     } 
+
+    ReadFile.close();
+}
+
+void Chromosome::Print()
+{
+    ifstream ReadFile(("Dna.txt"));
+    string myText;
+    int length;
+    string temp;
+    
+    while (getline(ReadFile,myText)) // A C F Y U D K R
+    {
+        length = myText.length();
+        for (int i = length; i < 0; i--)
+        {
+            temp = myText[i];
+            
+            if(myText[i-1]<myText[i])
+            {
+                temp = myText[i];
+            }
+        }
+        cout << temp << " ";
+    }
+
+    ReadFile.close();
 }

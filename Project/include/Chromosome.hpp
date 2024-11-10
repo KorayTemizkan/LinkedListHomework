@@ -7,6 +7,12 @@
 
 using namespace std;
 
+
+struct Node {
+    char data;   
+    Node* next;  
+}; // BUNA DAHA SONRA BAK
+
 class Chromosome
 {
 private:
@@ -24,13 +30,17 @@ public:
 
     void ConvertChar();
 
-    void Cross();
+    void Cross(int fnum1 , int fnum2);
 
-    void Mutation();
+    void Mutation(int fnum1 , int fnum2);
 
     void PrintAll(); 
 
     void DeleteAll();
+
+    void Automatic();
+
+    void Print();
 };
 
 #endif
