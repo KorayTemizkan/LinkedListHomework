@@ -161,5 +161,31 @@ void Chromosome::Mutation()
     // 1 ÇIKARIP 2 İLE ÇARP
     // 0 2 4 6
     // D E V U
+    
     pSel1->genes[(choiceCol-1)*2]='X';
+}
+
+void Chromosome::Automatic()
+{
+    ifstream ReadFile("Islemler.txt");
+    string myText;
+    char operation = '\0';
+    int num1 = 0 ,num2 =0;
+
+    while (getline(ReadFile,myText))
+    {
+        operation = myText[0];
+        num1 = myText[2];
+        num2 = myText[4];
+        
+        if (operation=='C')
+        {
+            Cross(num1,num2);
+        }
+
+        if (operation=='M')
+        {
+            Mutation(num1,num2);
+        }
+    } 
 }
