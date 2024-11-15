@@ -1,18 +1,21 @@
-
-
-
 #include "Chromosome.hpp"
 
 Chromosome::Chromosome()
 {
     pNext = nullptr;
     pPrev = nullptr;
+
+    pRoot = nullptr;
+    pTail = nullptr;
+
+    pDnaRoot = nullptr;
+    pDnaTail = nullptr;
 }
 
 void Chromosome::AddListItemsFromText()
 {
         ifstream ReadFile("Dna.txt");
-        string myText;
+        char myDna;
 
         if (pRoot == nullptr)
         {
@@ -20,17 +23,33 @@ void Chromosome::AddListItemsFromText()
         }
         
         Chromosome *pSel1 = pRoot;
+        Dna *pDnaSel1 = new Dna();
 
-        while (getline(ReadFile, myText))
+        while (ReadFile.get(myDna))
         {
-            Chromosome *pSel2 = new Chromosome();
-            pSel2->genes = myText;
+            if(myDna == '\n')
+            {
+                Chromosome *pSel2 = new Chromosome();
+                pSel1->pNext=pSel2;
+                pSel2->pPrev=pSel1;
+                pSel1=pSel2;
+            }
 
-                pSel1->pNext = pSel2; 
-                pSel2->pPrev = pSel1; 
-                pSel2->pNext = NULL;
-            
-            pSel1 = pSel2;
+            Dna *pDnaSel2 = new Dna();
+            pDnaSel2->setDna(myDna);
+
+            if (pSel1->pDnaRoot == nullptr)
+            {
+                pSel1->pDnaRoot = pDnaSel1;
+                pSel1->pDnaTail = pDnaSel1;
+            }
+
+            else
+            {
+               pDnaSel1->set_pDnaNext(pDnaSel2);
+               pDnaSel2->set_pDnaPrev(pDnaSel2);
+               pSel1->pDnaTail = pDnaSel2;
+            }
         }
 
         ReadFile.close();
@@ -42,7 +61,11 @@ void Chromosome::PrintAll()
 
     while (pSel != nullptr)
     {
-        cout << pSel->genes << endl;
+        while (pSel->pDnaRoot->get_pDnaNext()!=nullptr)
+        {
+            cout << pSel->pDnaRoot->getDna() << endl;
+        }
+        
         pSel = pSel->pNext;
     }
     
@@ -54,9 +77,14 @@ void Chromosome::DeleteAll()
     
     while (pSel != nullptr)
     {
-        pRoot = pSel->pNext;
-        free(pSel);
-        pSel = pRoot;
+        while (pSel->pDnaRoot->get_pDnaNext()!=nullptr)
+        {
+            pRoot = pSel->pNext;
+            delete(pSel);
+            pSel=pRoot;
+        }
+
+        pSel = pSel->pNext;
     }
 }
 

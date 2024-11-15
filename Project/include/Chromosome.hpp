@@ -4,26 +4,23 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include "Dna.hpp"
 
 using namespace std;
-
-
-struct Node {
-    char data;   
-    Node* next;  
-}; // BUNA DAHA SONRA BAK
 
 class Chromosome
 {
 private:
-    string genes;
-    
     Chromosome *pNext;
     Chromosome *pPrev;
 
-public:
-    Chromosome *pRoot = nullptr;
+    Chromosome *pRoot;
+    Chromosome *pTail;
 
+    Dna *pDnaRoot;
+    Dna *pDnaTail;
+
+public:
     Chromosome();
 
     void AddListItemsFromText();
