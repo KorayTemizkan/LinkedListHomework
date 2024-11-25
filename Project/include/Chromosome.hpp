@@ -31,13 +31,10 @@ public:
 
     void Mutation(int fnum1 , int fnum2);
 
-    void PrintAll(); 
-
-    void DeleteAll();
-
     void Automatic();
 
     void Print();
 };
 
+// bu fonksiyonları ve pRoot-pTail kaldır
 #endif

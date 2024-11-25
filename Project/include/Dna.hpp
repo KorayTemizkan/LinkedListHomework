@@ -17,11 +17,6 @@ private:
 public:
     Dna();
 
-    char getDna() const
-    {
-        return dna;
-    }
-
     void *setDna(char d)
     {
         dna = d;
@@ -37,12 +32,17 @@ public:
         pDnaPrev = pSelPrev;
     }
 
-    void *get_pDnaNext() const
+    char getDna()
+    {
+        return dna;
+    }
+
+    Dna *get_pDnaNext()
     {
         return pDnaNext;
     }
 
-    void *get_pDnaPrev() const
+    Dna *get_pDnaPrev()
     {
         return pDnaPrev;
     }

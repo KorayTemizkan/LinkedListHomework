@@ -14,8 +14,8 @@ Chromosome::Chromosome()
 
 void Chromosome::AddListItemsFromText()
 {
-        ifstream ReadFile("Dna.txt");
-        char myDna;
+    ifstream ReadFile("Dna.txt");
+    char myDna;
 
         if (pRoot == nullptr)
         {
@@ -24,83 +24,58 @@ void Chromosome::AddListItemsFromText()
         
         Chromosome *pSel1 = pRoot;
         Dna *pDnaSel1 = new Dna();
+        int control = 0;
 
         while (ReadFile.get(myDna))
         {
-            if(myDna == '\n')
+            if(control%2==0)
             {
-                Chromosome *pSel2 = new Chromosome();
-                pSel1->pNext=pSel2;
-                pSel2->pPrev=pSel1;
-                pSel1=pSel2;
-            }
 
-            Dna *pDnaSel2 = new Dna();
-            pDnaSel2->setDna(myDna);
+                if(myDna == '\n')
+                {
+                    Chromosome *pSel2 = new Chromosome();
+                    pSel1->pNext=pSel2;
+                    pSel2->pPrev=pSel1;
+                    pSel1=pSel2;
+                }
+  
+                if (pSel1->pDnaRoot == nullptr)
+                {
+                    pDnaSel1 = pSel1->pDnaRoot;
+                    pDnaSel1 = pSel1->pDnaTail;
+                    pDnaSel1->setDna(myDna);
+                    control++;
+                }
 
-            if (pSel1->pDnaRoot == nullptr)
-            {
-                pSel1->pDnaRoot = pDnaSel1;
-                pSel1->pDnaTail = pDnaSel1;
-            }
+                else
+                {
+                    Dna *pDnaSel2 = new Dna();
+                    pDnaSel1->set_pDnaNext(pDnaSel2);
+                    pDnaSel2->set_pDnaPrev(pDnaSel2);
+                    pDnaSel2->setDna(myDna);
+                    pDnaSel2 = pSel1->pDnaTail;
+                }
 
-            else
-            {
-               pDnaSel1->set_pDnaNext(pDnaSel2);
-               pDnaSel2->set_pDnaPrev(pDnaSel2);
-               pSel1->pDnaTail = pDnaSel2;
             }
+ 
+            control++;
         }
 
-        ReadFile.close();
-}
-
-void Chromosome::PrintAll()
-{
-    Chromosome *pSel = pRoot;
-
-    while (pSel != nullptr)
-    {
-        while (pSel->pDnaRoot->get_pDnaNext()!=nullptr)
-        {
-            cout << pSel->pDnaRoot->getDna() << endl;
-        }
-        
-        pSel = pSel->pNext;
-    }
-    
-}
-
-void Chromosome::DeleteAll()
-{
-    Chromosome *pSel = pRoot;
-    
-    while (pSel != nullptr)
-    {
-        while (pSel->pDnaRoot->get_pDnaNext()!=nullptr)
-        {
-            pRoot = pSel->pNext;
-            delete(pSel);
-            pSel=pRoot;
-        }
-
-        pSel = pSel->pNext;
-    }
+    ReadFile.close();
 }
 
 void Chromosome::Cross(int fnum1 , int fnum2)
 {   
     int choice1 = 0 , choice2 = 0;
     int length1 = 0 , length2 = 0;
-    string temp1="", temp2="" , sub1="" , sub2="" , sub3="" , sub4="" , res1 = "",res2="";
     
     if(fnum1 == 0 && fnum2 == 0)
     {
-    cout << "Hangi satirlari caprazlamak istiyorsunuz ? (0-x)" << endl;
-    cout << "1 : " << choice1 << endl;
-    cin >> choice1;
-    cout << "2 : " << choice2 << endl;
-    cin >> choice2;
+        cout << "Hangi satirlari caprazlamak istiyorsunuz ? (0-x)" << endl;
+        cout << "1 : " << choice1 << endl;
+        cin >> choice1; // 2
+        cout << "2 : " << choice2 << endl;
+        cin >> choice2; // 3
     }
 
     else
@@ -108,75 +83,66 @@ void Chromosome::Cross(int fnum1 , int fnum2)
         choice1 = fnum1;
         choice2 = fnum2;
     }
-    // Mesela 3 ve 4'e erişelim
-    // A C F Y U D K R (15 KARAKTER = %2 = 7.5)
-    // M U A D T R     (11 KARAKTER = %2 = 5.5)
 
     Chromosome *pSel1 = pRoot;
-    for (int i = 0; i < choice1; i++)
+    for (int i = 1; i = choice1; i++)
     {
         pSel1 = pSel1->pNext;
     }
     
+    Dna *pDna1 = pSel1->pDnaRoot;
+    while (pDna1->get_pDnaNext()!= nullptr)
+    {
+        length1++;
+        pDna1 = pDna1->get_pDnaNext();
+    }
+    
     Chromosome *pSel2 = pRoot;
-    for (int i = 0; i < choice2; i++)
+    for (int i = 1; i = choice2; i++)
     {
         pSel2 = pSel2->pNext;
     }
 
-
-
-    length1 = pSel1->genes.length();
-    length2 = pSel2->genes.length();
-
-
-
-    if (length1%2!=0) // Toplam gen sayısı çift sayıysa
+    Dna *pDna2 = pSel2->pDnaRoot;
+    while (pSel2->pDnaRoot->get_pDnaNext() != nullptr)
     {
-        sub1 = pSel2->genes.substr(0,(length1/2)-1);
-        sub2 = pSel2->genes.substr((length1/2)+1,length1);
+        length2++;
+        pDna2 = pDna2->get_pDnaNext();
     }
 
-    /*
-    else // Tek sayıysa
+    Chromosome *pNewCross1 = new Chromosome;
+    Chromosome *pNewCross2 = new Chromosome;
+
+    if (length1 % 2 != 0 && length2 % 2 == 0)
     {
-        sub1 = pSel1->genes.substr(0,(length1/2));
-    }
-    */
+        length1 = length1/2 - 1;
+        pDna1 = pSel1->pDnaRoot;                // ana dna'daki kromozom dnaları
+        Dna *pSelCross1 = pNewCross1->pDnaRoot; // yeni oluşturulacak kromozom dnaları
 
-    if (length2%2==0) // Çift sayıysa
-    {
-        sub3 = pSel2->genes.substr(0,(length2/2)-1);
-        sub4 = pSel2->genes.substr((length2/2)+1,length2);
-    }
-    
-    /*
-    else // Tek sayıysa
-    {
-        sub2 = pSel2->genes.substr((length2/2-1),length2);
-    }
-    */
+        for (int i = 1; i = length1; i++)
+        {
+            pSelCross1->setDna(pDna1->getDna());
+            pDna1 = pDna1->get_pDnaNext();
+            pSelCross1 = pSelCross1->get_pDnaNext();
+        }   
 
 
+        pDna2 = pSel2->pDnaRoot;
 
-    res1 = sub1+sub4;
-    res2 = sub2+sub3;
+        for (int i = 0; i = (length2/2); i++)
+        {
+            pDna2 = pDna2->get_pDnaNext();
+        }
+        
+        for (int i = 1; i = length2; i++)
+        {
+            pSelCross1->get_pDnaNext()->setDna(pDna2->getDna());
+        }
 
-
-
-    Chromosome *pSel3 = pRoot;
-    Chromosome *pNew1 = new Chromosome();
-    Chromosome *pNew2 = new Chromosome();
-
-    while (pSel3!=nullptr)
-    {
-        pSel3=pSel3->pNext;
-    }
- 
-    pNew1->genes=res1;
-    pNew2->genes=res2;
-    pSel3->pNext = pNew1;
-    pNew1->pNext = pNew2;
+        pTail->pNext = pNewCross1;
+        pNewCross1->pPrev = pTail;
+        pTail = pNewCross1;
+    }   
 }
 
 void Chromosome::Mutation(int fnum1 , int fnum2)
@@ -195,37 +161,51 @@ void Chromosome::Mutation(int fnum1 , int fnum2)
         pSel1 = pSel1->pNext;
     }
 
-    // Mesela 2. satıra 3.sütun olsun (indis : 1)(indis : 3) , (D E V U)
-
-    // 1 ÇIKARIP 2 İLE ÇARP
-    // 0 2 4 6
-    // D E V U
-    
-    pSel1->genes[(choiceCol-1)*2]='X';
+    Dna *pDna1 = pSel1->pDnaRoot;
+    for (int i = 0; i < choiceCol; i++)
+    {
+        pDna1 = pDna1->get_pDnaNext();
+        pDna1->setDna('X');
+    }
 }
 
 void Chromosome::Automatic() // switch case mantıklı
 {
     ifstream ReadFile("Islemler.txt");
-    string myText;
-    char operation = '\0';
-    int num1 = 0 ,num2 =0;
+    char operation = '\0' , myOperation;
+    int num1 = 0 ,num2 = 0, control = 0;
 
-    while (getline(ReadFile,myText))
+    while (ReadFile.get(myOperation)) // C 1 3
     {
-        operation = myText[0];
-        num1 = myText[2];
-        num2 = myText[4];
-        
-        if (operation=='C')
+        if (control == 0)
         {
-            Cross(num1,num2);
+            operation = myOperation;
         }
 
-        if (operation=='M')
+        if(control == 3)
         {
-            Mutation(num1,num2);
+            num1 = myOperation;
         }
+
+        if (control == 5)
+        {
+            num2 = myOperation;
+        }
+
+        if (control == '\n')
+        {
+            if (operation == 'C')
+            {           
+                Chromosome::Cross(num1 , num2);
+            }
+            
+            else if (operation == 'M')
+            {
+                Chromosome::Mutation(num1 , num2);
+            }
+            
+            control = 0;
+        }  
     } 
 
     ReadFile.close();
@@ -234,24 +214,30 @@ void Chromosome::Automatic() // switch case mantıklı
 void Chromosome::Print()
 {
     ifstream ReadFile(("Dna.txt"));
-    string myText;
-    int length;
-    string temp;
-    
-    while (getline(ReadFile,myText)) // A C F Y U D K R
-    {
-        length = myText.length();
-        for (int i = length; i < 0; i--)
-        {
-            temp = myText[i];
-            
-            if(myText[i-1]<myText[i])
-            {
-                temp = myText[i];
-            }
-        }
-        cout << temp << " ";
-    }
+    int length = 0;
+    char dna1 = '\0' , dna2 = '\0', mainDna = '\0';
 
+    Chromosome *pSel = pRoot;
+    Dna *pDna = pSel->pDnaTail;
+
+    while (pSel->pNext != nullptr)
+    {
+        while (!pSel->pDnaRoot)
+        {
+            dna1 = pDna->getDna();
+            dna2 = pDna->get_pDnaPrev()->getDna();
+            
+            if (dna2 > dna1)
+            {
+                mainDna = dna2;
+            }
+
+            pDna = pDna->get_pDnaPrev();
+        }
+        cout << mainDna << " ";
+
+        pSel = pSel->pNext;
+    }
+    
     ReadFile.close();
 }
