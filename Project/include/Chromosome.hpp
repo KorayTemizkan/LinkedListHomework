@@ -1,10 +1,18 @@
+/**
+* Dosya adı = Chromosome.hpp  
+* Bu dosya Chromosome sınıf yapisi , bu sınıf icin gereken değişkenleri ve fonksiyonların prototiplerini tanimlamak icin kullanilir.
+* 1. Ogretim A grubu
+* 1. Odev
+* 27/11/2024 Çarşamba
+* Koray Temizkan - koray.temizkan@ogr.sakarya.edu.tr
+*/
+
 #ifndef CHROMOSOME_HPP
 #define CHROMOSOME_HPP
 
 #include <iostream>
 #include <fstream>
-#include <string>
-#include "Dna.hpp"
+#include <Dna.hpp>
 
 using namespace std;
 
@@ -14,9 +22,6 @@ private:
     Chromosome *pNext;
     Chromosome *pPrev;
 
-    Chromosome *pRoot;
-    Chromosome *pTail;
-
     Dna *pDnaRoot;
     Dna *pDnaTail;
 
@@ -25,8 +30,6 @@ public:
 
     void AddListItemsFromText();
 
-    void ConvertChar();
-
     void Cross(int fnum1 , int fnum2);
 
     void Mutation(int fnum1 , int fnum2);
@@ -34,7 +37,8 @@ public:
     void Automatic();
 
     void Print();
+
+    void TestPrint();
 };
 
-// bu fonksiyonları ve pRoot-pTail kaldır
 #endif

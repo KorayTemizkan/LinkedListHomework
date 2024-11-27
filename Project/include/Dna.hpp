@@ -1,8 +1,16 @@
+/**
+* Dosya adı = Dna.hpp  
+* Bu dosya Dna sınıf yapisi , bu sınıf icin gereken değişkenleri ve fonksiyonların prototiplerini tanimlamak icin kullanilir.
+* 1. Ogretim A grubu
+* 1. Odev
+* 27/11/2024 Çarşamba
+* Koray Temizkan - koray.temizkan@ogr.sakarya.edu.tr
+*/
+
 #ifndef DNA_HPP
 #define DNA_HPP
 
 #include <iostream>
-#include <fstream>
 #include <string>
 
 using namespace std;
@@ -17,35 +25,17 @@ private:
 public:
     Dna();
 
-    void *setDna(char d)
-    {
-        dna = d;
-    }
+    void setDna(char d);
+
+    char getDna();
  
-    void *set_pDnaNext(Dna *pSelNext)
-    {
-        pDnaNext = pSelNext;
-    }
+    void set_pDnaNext(Dna *pSelNext);
 
-    void *set_pDnaPrev(Dna *pSelPrev)
-    {
-        pDnaPrev = pSelPrev;
-    }
+    void set_pDnaPrev(Dna *pSelPrev);
 
-    char getDna()
-    {
-        return dna;
-    }
+    Dna *get_pDnaNext();
 
-    Dna *get_pDnaNext()
-    {
-        return pDnaNext;
-    }
-
-    Dna *get_pDnaPrev()
-    {
-        return pDnaPrev;
-    }
+    Dna *get_pDnaPrev();
 };
 
 #endif
