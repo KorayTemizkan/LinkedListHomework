@@ -18,13 +18,12 @@ using namespace std;
 class Dna
 {
 private:
-    char dna;
+    char gene;
     Dna *pDnaNext;
     Dna *pDnaPrev;
 
 public:
     Dna();
-
     void setDna(char d);
 
     char getDna();

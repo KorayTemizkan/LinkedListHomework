@@ -25,7 +25,7 @@ Chromosome *pRoot = new Chromosome();
 
 void Chromosome::AddListItemsFromText()
 {
-    ifstream ReadFile("/home/koray/Desktop/Ders/Veri Yapıları/Odev1.1/Project/Dna.txt");
+    ifstream ReadFile("./Dna.txt");
 
     if (!ReadFile)
     {
@@ -67,31 +67,37 @@ void Chromosome::AddListItemsFromText()
     }
     ReadFile.close();
 }
+
 void Chromosome::Cross(int fnum1, int fnum2)
 {
     int choice1 = fnum1, choice2 = fnum2;
-    if (fnum1 == -1 && fnum2 == -1)
-    {
-        cout << "Hangi satirlari caprazlamak istiyorsunuz ? (0-x)" << endl;
-        cout << "1: ";
-        cin >> choice1;
-        cout << "2: ";
-        cin >> choice2;
-    }
 
     Chromosome *pSel1 = pRoot;
     for (int i = 0; i < choice1; i++)
     {
         pSel1 = pSel1->pNext;
+
+        if (pSel1 == nullptr)
+        {
+            cout << endl << "BILGI : Ilgili kromozom bulunamadi. Tekrar deneyiniz." << endl;
+            return;
+        }
     }
 
     Chromosome *pSel2 = pRoot;
     for (int i = 0; i < choice2; i++)
     {
         pSel2 = pSel2->pNext;
+
+        if (pSel2 == nullptr)
+        {
+            cout << endl << "BILGI : Ilgili kromozom bulunamadi. Tekrar deneyiniz." << endl;
+            return;
+        }
     }
 
     int length1 = 0, length2 = 0;
+
     Dna *pDna1 = pSel1->pDnaRoot;
     while (pDna1 != nullptr)
     {
@@ -105,12 +111,12 @@ void Chromosome::Cross(int fnum1, int fnum2)
         length2++;
         pDna2 = pDna2->get_pDnaNext();
     }
-
+    
     int mid1 = length1 / 2;
     int mid2 = length2 / 2;
 
-    if (length1 % 2 != 0) mid1++; 
-    if (length2 % 2 != 0) mid2++; 
+    if (length1 % 2 != 0) mid1++;
+    if (length2 % 2 != 0) mid2++;
 
     Dna *pLeft1 = pSel1->pDnaRoot;
     for (int i = 0; i < mid1; i++)
@@ -118,15 +124,17 @@ void Chromosome::Cross(int fnum1, int fnum2)
         pLeft1 = pLeft1->get_pDnaNext();
     }
 
-    Dna *pRight2 = pSel2->pDnaRoot;
+    Dna *pRight1 = pLeft1;
+
+    Dna *pLeft2 = pSel2->pDnaRoot;
     for (int i = 0; i < mid2; i++)
     {
-        pRight2 = pRight2->get_pDnaNext();
+        pLeft2 = pLeft2->get_pDnaNext();
     }
 
-    Chromosome *pCross1 = new Chromosome();
-    Chromosome *pCross2 = new Chromosome();
+    Dna *pRight2 = pLeft2;
 
+    Chromosome *pCross1 = new Chromosome();
     pDna1 = pSel1->pDnaRoot;
     while (pDna1 != pLeft1)
     {
@@ -154,16 +162,15 @@ void Chromosome::Cross(int fnum1, int fnum2)
         pCross1->pDnaTail->set_pDnaNext(newDna);
         newDna->set_pDnaPrev(pCross1->pDnaTail);
         pCross1->pDnaTail = newDna;
-
         pDna2 = pDna2->get_pDnaNext();
     }
 
-    pDna1 = pLeft1;
-    pDna2 = pSel2->pDnaRoot;
-    while (pDna2 != pRight2)
+    Chromosome *pCross2 = new Chromosome();
+    pDna1 = pRight1;
+    while (pDna1 != nullptr)
     {
         Dna *newDna = new Dna();
-        newDna->setDna(pDna2->getDna());
+        newDna->setDna(pDna1->getDna());
         if (pCross2->pDnaRoot == nullptr)
         {
             pCross2->pDnaRoot = newDna;
@@ -175,17 +182,17 @@ void Chromosome::Cross(int fnum1, int fnum2)
             newDna->set_pDnaPrev(pCross2->pDnaTail);
             pCross2->pDnaTail = newDna;
         }
-        pDna2 = pDna2->get_pDnaNext();
+        pDna1 = pDna1->get_pDnaNext();
     }
-
-    while (pDna1 != nullptr)
+    pDna2 = pSel2->pDnaRoot;
+    while (pDna2 != pLeft2)
     {
         Dna *newDna = new Dna();
-        newDna->setDna(pDna1->getDna());
+        newDna->setDna(pDna2->getDna());
         pCross2->pDnaTail->set_pDnaNext(newDna);
         newDna->set_pDnaPrev(pCross2->pDnaTail);
         pCross2->pDnaTail = newDna;
-        pDna1 = pDna1->get_pDnaNext();
+        pDna2 = pDna2->get_pDnaNext();
     }
 
     Chromosome *pTail = pRoot;
@@ -199,33 +206,39 @@ void Chromosome::Cross(int fnum1, int fnum2)
 
     pCross1->pNext = pCross2;
     pCross2->pPrev = pCross1;
-}
 
+    cout << endl << "BILGI : Caprazlama islemi yapildi" << endl;
+}
 
 void Chromosome::Mutation(int fnum1 , int fnum2)
 {
     int choiceRow = fnum1 , choiceCol = fnum2;
-    if (fnum1 == -1 && fnum2 == -1)
-    {
-        cout << "Kacinci kromozomun kacinci satirini X yapmak istersiniz?" << endl;
-        cout << "1 : ";
-        cin >> choiceRow;
-        cout << "2 : ";
-        cin >> choiceCol;
-    }
 
     Chromosome *pSel = pRoot;
     for (int i = 0; i < choiceRow; i++)
     {
         pSel = pSel->pNext;
+
+        if (pSel == nullptr)
+        {
+            cout << endl << "BILGI : Ilgili kromozom bulunamadi. Tekrar deneyiniz." << endl;
+            return;
+        }
     }
 
     Dna *pDna = pSel->pDnaRoot;
     for (int i = 0; i < choiceCol; i++)
     {
         pDna = pDna->get_pDnaNext();
-    }
 
+        if (pDna == nullptr)
+        {
+            cout << endl << "BILGI : Ilgili dna bulunamadi. Tekrar deneyiniz." << endl;
+            return;
+        }
+        
+    }
+    
     pDna->setDna('X');
 
     pDna = pSel->pDnaRoot;
@@ -233,47 +246,43 @@ void Chromosome::Mutation(int fnum1 , int fnum2)
     {
         pDna=pDna->get_pDnaNext();
     }
+
+     cout << endl << "BILGI : Mutasyon islemi yapildi" << endl;
 }
+
 
 void Chromosome::Automatic()
 {
-    ifstream ReadFile("/home/koray/Desktop/Ders/Veri Yapıları/Odev1.1/Project/Islemler.txt");
-    char operation = '0', myOperation = '0';
-    int num1 = 0, num2 = 0, control = 0;
-
-    while (ReadFile.get(myOperation))
+    ifstream ReadFile("./Islemler.txt");
+    
+    if (ReadFile.is_open())
     {
-        switch (control)
+        char operation;
+        int num1 = 0, num2 =0;
+
+        while(ReadFile.get(operation))
         {
-            case 0: 
-                operation = myOperation;
-                break;
+            if(operation == 'C')
+            {
+                ReadFile >> num1;
+                ReadFile >> num2;
+                Chromosome::Cross(num1, num2);
+                cout << endl;
+            }
 
-            case 2:
-                num1 = myOperation - '0'; 
-                break;
-
-            case 4: 
-                num2 = myOperation - '0';
-                break;
-
-            default:
-                if (myOperation == '\n')
-                {
-                    if (operation == 'C')
-                    {
-                        Chromosome::Cross(num1, num2); 
-                    }
-                    else if (operation == 'M')
-                    {
-                        Chromosome::Mutation(num1, num2); 
-                    }
-
-                    control = -1; 
-                }
-                break;
+            else if(operation == 'M')
+            {
+                ReadFile >> num1;
+                ReadFile >> num2;
+                Chromosome::Mutation(num1, num2);
+                cout << endl;
+            }
         }
-        control++;
+    }    
+
+    else    
+    {
+        cout << "Dosya acilamadi." << endl;
     }
 
     ReadFile.close();
@@ -282,7 +291,7 @@ void Chromosome::Automatic()
 void Chromosome::Print()
 {
     char dna1 = '0', dna2 = '0';
-
+    
     Chromosome *pSel = pRoot;
     while (pSel != nullptr)
     {
@@ -295,7 +304,7 @@ void Chromosome::Print()
             
             if (dna2 < dna1)
             {
-                cout << dna2 << endl;
+                cout << dna2 << " ";
                 break;
             }
 
@@ -304,15 +313,19 @@ void Chromosome::Print()
 
         if (pDna == pSel->pDnaRoot)
         {
-            cout << dna1 << endl;
+            cout << dna1 << " ";
         }
         
         pSel = pSel->pNext;
     }
+
+    cout << endl;
 }
 
 void Chromosome::TestPrint()
 {
+    cout << endl;
+    
     Chromosome *pSel = pRoot;
     while (pSel != nullptr)
     {
@@ -331,4 +344,26 @@ void Chromosome::TestPrint()
         cout << endl;
         pSel = pSel->pNext;
     }
+}
+
+Chromosome::~Chromosome()
+{
+    Chromosome *pDel = pRoot;
+
+    while (pDel != nullptr)
+    {
+        Dna *pDnaDel = pDel->pDnaRoot;
+        while (pDnaDel != nullptr)
+        {
+            pDel->pDnaRoot = pDnaDel->get_pDnaNext();
+            delete pDnaDel;
+            pDnaDel = pDel->pDnaRoot;
+        }
+
+        pRoot= pDel->pNext;
+        delete pDel;
+        pDel = pRoot;
+    }
+
+    pRoot  = nullptr;
 }

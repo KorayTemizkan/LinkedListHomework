@@ -11,14 +11,14 @@
 
 Dna::Dna()
 {
-    dna = '0';
+    gene = '0';
     pDnaNext = nullptr;
     pDnaPrev = nullptr;
 }
 
 void Dna::setDna(char d)
 {
-    dna = d;
+    gene = d;
 }
 
 void Dna::set_pDnaNext(Dna *pSelNext)
@@ -33,7 +33,7 @@ void Dna::set_pDnaPrev(Dna *pSelPrev)
 
 char Dna::getDna()
 {
-    return dna;
+    return gene;
 }
 
 Dna *Dna::get_pDnaNext()

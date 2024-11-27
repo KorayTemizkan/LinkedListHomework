@@ -28,6 +28,8 @@ private:
 public:
     Chromosome();
 
+    ~Chromosome();
+
     void AddListItemsFromText();
 
     void Cross(int fnum1 , int fnum2);
