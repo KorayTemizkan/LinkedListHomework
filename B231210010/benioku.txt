@@ -1,0 +1,4 @@
+Ödev "Linux Mint 22 Cinnamon" ortamında geliştirildiği için "Windows" ortamında sorun çıkabilir. Tahmin ettiğim potansiyel sorunlar :
+
+1 - Dosya yolu bulmada sıkıntı çıkabilir . Ben "./Dna.txt" ile ulaşıyorum.
+2 - Programı çalıştırmada sorun çıkabilir . Ben konsola "make" komutunu yazarak çalıştırıyorum.
